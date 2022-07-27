@@ -1,0 +1,63 @@
+service: serverless-rest-api-with-dynamodb
+
+
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  environment:
+    DYNAMODB_TABLE: 'ORDERSPAYMENT'
+    self: 
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:us-east-1:174233988973:table/ORDERSPAYMENT"
+
+functions:
+  create:
+    handler: Payments/create.create
+    events:
+      - http:
+          path: ORDERSPAYMENT/{Userid}
+          method: post
+          cors: true
+
+  list:
+    handler: Payments/list.list
+    events:
+      - http:
+          path: ORDERSPAYMENT
+          method: get
+          cors: true
+
+  get:
+    handler: Payments/get.get
+    events:
+      - http:
+          path: ORDERSPAYMENT/{Userid}
+          method: get
+          cors: true
+
+  update:
+    handler: Payments/update.update
+    events:
+      - http:
+          path: ORDERSPAYMENT/{Userid}
+          method: put
+          cors: true
+
+  delete:
+    handler: Payments/delete.delete
+    events:
+      - http:
+          path: ORDERSPAYMENT/{Userid}
+          method: delete
+          cors: true
