@@ -1,20 +1,26 @@
 'use strict';
 
-import AWS from '/var/runtime/node_modules/aws-sdk/lib/aws.js';
+import AWS from 'aws-sdk';
 const { DynamoDB } = AWS;
 const dynamoDb = new DynamoDB.DocumentClient();
-export const get = (event, context, callback) => 
- {
+var db = new AWS.DynamoDB();
+
+export const get = (event, context, callback) => {
+
+  let ordernumber = event.rawPath.split('/')[1];
+
+  console.error(ordernumber);
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Key: {
-      Userid: event.pathParameters.Userid,
+     Ordernumber: ordernumber,
       
     },
   };
 
   // fetch todo from the database
   dynamoDb.get(params, (error, result) => {
+    console.log(result);
     // handle potential errors
     if (error) {
       console.error(error);
@@ -29,7 +35,7 @@ export const get = (event, context, callback) =>
     // create a response
     const response = {
       statusCode: 200,
-      body: JSON.stringify(result.Item),
+      body: result.Item,
     };
     callback(null, response);
   });

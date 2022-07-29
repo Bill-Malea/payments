@@ -26,7 +26,7 @@ functions:
     handler: Payments/create.create
     events:
       - http:
-          path: ORDERSPAYMENT/{Userid}
+          path: ORDERSPAYMENT/{Ordernumber}/{Userid}
           method: post
           cors: true
 
@@ -42,7 +42,7 @@ functions:
     handler: Payments/get.get
     events:
       - http:
-          path: ORDERSPAYMENT/{Userid}
+          path: ORDERSPAYMENT/{Ordernumber}
           method: get
           cors: true
 
@@ -50,7 +50,7 @@ functions:
     handler: Payments/update.update
     events:
       - http:
-          path: ORDERSPAYMENT/{Userid}
+          path: ORDERSPAYMENT/{Ordernumber}
           method: put
           cors: true
 
@@ -58,6 +58,6 @@ functions:
     handler: Payments/delete.delete
     events:
       - http:
-          path: ORDERSPAYMENT/{Userid}
+          path: ORDERSPAYMENT/{Ordernumber}
           method: delete
           cors: true

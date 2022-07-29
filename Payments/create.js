@@ -6,10 +6,12 @@ const dynamoDb = new DynamoDB.DocumentClient();
 
 
 export const create  = (event, context, callback) => {
-
-  const responseData = event.body;
  
-  let  data = JSON.parse(responseData);
+ 
+  let userid = event.rawPath.split('/')[1];
+  let ordernumber = event.rawPath.split('/')[2];
+
+  let  data = JSON.parse(event.body);
 
 let responseBody = data.Body.stkCallback;
    let resPCODE = responseBody.ResultCode;
@@ -41,33 +43,20 @@ let responseBody = data.Body.stkCallback;
       
    });
 
- let  Usertransactionpayload = {
-    
-   Ordernumber : mpesatransactioncode,
-   Amount: amountpaid,
-   Phonenumber:phonenumber,
-    paymentstatus : true
-
+ let  Usertransactionpayload = 
+ {   
+      Amount: amountpaid,
+      Phonenumber:phonenumber,
+       paymentstatus : true,
    }
- 
-   console.log(Usertransactionpayload)
-
-
- let userid = event.pathParameters.Userid;
-
-
- //console.log(userid);
-
 
     const params = {
     TableName: process.env.DYNAMODB_TABLE,
-    
     Item: {
-    Userid : userid,
-    Orders   : {
-    ordernumber : Usertransactionpayload
-     }
-      
+    Userid:userid,
+    Ordernumber: ordernumber,
+    Order   : Usertransactionpayload
+    
     },
      
     
@@ -94,6 +83,13 @@ if (error) {
     statusCode: 200,
     body: JSON.stringify('sucessful'),
   };
+
+
+
+
+
+
+
   callback(null, response);
 });
 
@@ -108,6 +104,23 @@ if (error) {
 
 
   
+
+
+ }else{
+
+  const response = {
+    statusCode: 400,
+    body: JSON.stringify('An Error Occured'),
+  };
+
+
+
+
+
+
+
+  callback(null, response);
+
 
 
  }
